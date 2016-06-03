@@ -1,0 +1,48 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Bloog!
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'application', 'http://fonts.googleapis.com/css?family=Kalam'
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = favicon_link_tag 'favicon.ico'
+    = csrf_meta_tags
+  %body
+    #sidebar
+      -##logo
+      -#  = link_to root_path do
+      -#    = image_tag "logo.svg"
+      %ul
+        %li.category Linky Links
+        %li= link_to "Bloog Posts", root_path
+        %li= link_to "Aboot Mee", about_path
+      %ul
+        %li.category Sosho Links
+        %li
+          %a{:href => "https://twitter.com/HelloDuy"} Tweeter
+        %li
+          %a{:href => "https://github.com/DuyH"} Gethoob
+        %li
+          %a{:href => "mailto:dhuynh88@uw.edu"} Emale
+      - unless user_signed_in?
+        %p.sign_in= link_to "Admin Login", new_user_session_path
+    #main_content
+      #header
+        - if current_page?(root_path)
+          %p=link_to 'Bloog', root_path
+        - elsif current_page?(about_path)
+          %p About
+        - else
+          = link_to "Back to All Bloog Posts", root_path
+        - if user_signed_in?
+          .buttons
+            %button.button= link_to "New Post", new_post_path
+            %button.button= link_to 'Log Out',destroy_user_session_path, method: :delete
+        - else
+          .buttons
+            %button.button= link_to 'Sign Up', new_user_registration_path
+            %button.button= link_to 'Sign In', new_user_session_path
+      - flash.each do |name, msg|
+        = content_tag(:div, msg, class: "alert")
+      = yield

@@ -1,4 +1,6 @@
 class PostsController < ApplicationController
+
+  before_action :authenticate_user!, except: [:index, :show]
   def index
     @posts = Post.all.order('created_at DESC')
   end
@@ -18,7 +20,6 @@ class PostsController < ApplicationController
       render 'new'
     end
 
-    redirect_to @post
   end
 
   def show
